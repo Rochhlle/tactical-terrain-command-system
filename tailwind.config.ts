@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Military theme colors
+				military: {
+					background: '#131A2A',
+					primary: '#1A2A40',
+					info: '#1EAEDB',
+					alert: '#F97316',
+					success: '#2E7D32',
+					warning: '#FFB74D',
+					danger: '#C62828',
+					text: '#E0E0E0',
 				}
 			},
 			borderRadius: {
@@ -70,25 +82,59 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						'box-shadow': '0 0 5px rgba(30, 174, 219, 0.5)',
+						'opacity': '0.9' 
 					},
-					to: {
-						height: '0'
+					'50%': { 
+						'box-shadow': '0 0 20px rgba(30, 174, 219, 0.8)',
+						'opacity': '1' 
 					}
+				},
+				'alert-pulse': {
+					'0%, 100%': { 
+						'box-shadow': '0 0 5px rgba(249, 115, 22, 0.5)',
+						'opacity': '0.9' 
+					},
+					'50%': { 
+						'box-shadow': '0 0 20px rgba(249, 115, 22, 0.8)',
+						'opacity': '1' 
+					}
+				},
+				'scanning': {
+					'0%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(100%)' },
+					'100%': { transform: 'translateY(0)' }
+				},
+				'data-flow': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s infinite',
+				'alert-pulse': 'alert-pulse 1.5s infinite',
+				'scanning': 'scanning 8s ease-in-out infinite',
+				'data-flow': 'data-flow 4s ease-in-out infinite'
+			},
+			backgroundImage: {
+				'grid-pattern': 'linear-gradient(rgba(62, 77, 110, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(62, 77, 110, 0.07) 1px, transparent 1px)',
+				'camo-overlay': 'url("/camo-pattern.png")',
+				'carbon-fiber': 'url("/carbon-fiber.png")'
+			},
+			fontFamily: {
+				'jetbrains': ['JetBrains Mono', 'monospace'],
+				'roboto-mono': ['Roboto Mono', 'monospace']
 			}
 		}
 	},
