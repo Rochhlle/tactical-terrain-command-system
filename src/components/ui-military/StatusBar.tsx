@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Clock, AlertTriangle, Shield, Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -47,7 +46,14 @@ const StatusBar: React.FC<StatusBarProps> = ({
   return (
     <div className="military-panel flex items-center justify-between px-4 py-2 text-sm">
       <div className="flex items-center space-x-6">
-        <div className="font-bold tracking-wider">KAAL COMMAND NEXUS</div>
+        <div className="flex items-center">
+          <img 
+            src="/lovable-uploads/e8bf466e-32fa-4383-8a40-e80668c31ae9.png" 
+            alt="KAAL Command Nexus Logo" 
+            className="h-8 w-8 mr-3" 
+          />
+          <span className="font-bold tracking-wider">KAAL COMMAND NEXUS</span>
+        </div>
         <div className="flex items-center">
           <span className="mr-2">System Status:</span>
           {systemStatus === 'green' && (

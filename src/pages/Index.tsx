@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import MilitaryButton from '@/components/ui-military/MilitaryButton';
 import { Monitor, Tablet } from 'lucide-react';
@@ -33,7 +32,14 @@ const Index = () => {
         <div className="data-flow top-3/4" style={{ animationDelay: '2s' }}></div>
       </div>
       
-      <div className="z-10 w-full max-w-3xl px-6 py-10">
+      <div className="z-10 w-full max-w-3xl px-6 py-10 text-center">
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/lovable-uploads/e8bf466e-32fa-4383-8a40-e80668c31ae9.png" 
+            alt="KAAL Command Nexus Logo" 
+            className="h-24 w-24" 
+          />
+        </div>
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-military-info mb-3 tracking-tighter">
             PROJECT KAAL
