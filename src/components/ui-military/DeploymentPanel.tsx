@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { Crosshair, Map, Send, Truck, User, Drone, Shield } from 'lucide-react';
+import { Crosshair, Map, Send, Truck, User, Plane, Shield } from 'lucide-react';
 import MilitaryButton from './MilitaryButton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -16,7 +16,7 @@ const DeploymentPanel: React.FC<{ className?: string }> = ({ className }) => {
   const [assets, setAssets] = useState<AssetItem[]>([
     { id: 'soldiers', name: 'Soldiers', icon: <User size={18} />, count: 0 },
     { id: 'tanks', name: 'Tanks', icon: <Truck size={18} />, count: 0 },
-    { id: 'drones', name: 'Drones', icon: <Drone size={18} />, count: 0 },
+    { id: 'drones', name: 'Drones', icon: <Plane size={18} />, count: 0 },
     { id: 'bunkers', name: 'Bunkers', icon: <Shield size={18} />, count: 0 }
   ]);
   
