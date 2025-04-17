@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { User, Shield, Zap } from 'lucide-react';
 import MilitaryButton from './MilitaryButton';
@@ -34,77 +33,62 @@ const ShockSuitPanel: React.FC<{ className?: string }> = ({ className }) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="relative">
-          <div className="aspect-[3/4] bg-military-primary/50 border border-military-info/30 rounded-md flex items-center justify-center">
-            {/* Human wireframe SVG */}
-            <svg viewBox="0 0 100 160" className="w-3/4 h-3/4 stroke-military-info/70 fill-none stroke-[0.5]">
-              {/* Head */}
-              <circle cx="50" cy="30" r="15" className="stroke-[0.5]" />
+          <div className="aspect-[3/4] bg-military-primary/50 border border-military-info/30 rounded-md flex items-center justify-center overflow-hidden">
+            <svg viewBox="0 0 100 160" className="w-3/4 h-3/4 stroke-military-info/70 fill-none stroke-[0.8]">
+              <path 
+                d="M50 20 
+                   C60 20, 65 25, 65 35
+                   L65 85
+                   C65 95, 60 100, 50 100
+                   C40 100, 35 95, 35 85
+                   L35 35
+                   C35 25, 40 20, 50 20Z"
+                className="stroke-military-info stroke-[1]"
+              />
               
-              {/* Torso */}
-              <rect 
-                x="35" 
-                y="45" 
-                width="30" 
-                height="40" 
-                rx="2" 
+              <path 
+                d="M45 40 L55 40 L55 80 L45 80 Z"
                 className={zones.find(z => z.id === 'torso')?.enabled 
                   ? "fill-military-info/20 stroke-military-info animate-pulse" 
-                  : "fill-transparent"} 
+                  : "fill-transparent"}
               />
               
-              {/* Arms */}
-              <rect 
-                x="15" 
-                y="50" 
-                width="20" 
-                height="8" 
-                rx="4" 
+              <path 
+                d="M65 45 C75 45, 85 45, 85 55 C85 65, 75 65, 65 65"
                 className={zones.find(z => z.id === 'arms')?.enabled 
                   ? "fill-military-info/20 stroke-military-info animate-pulse" 
-                  : "fill-transparent"} 
+                  : "fill-transparent"}
               />
-              <rect 
-                x="65" 
-                y="50" 
-                width="20" 
-                height="8" 
-                rx="4" 
+              <path 
+                d="M35 45 C25 45, 15 45, 15 55 C15 65, 25 65, 35 65"
                 className={zones.find(z => z.id === 'arms')?.enabled 
                   ? "fill-military-info/20 stroke-military-info animate-pulse" 
-                  : "fill-transparent"} 
+                  : "fill-transparent"}
               />
               
-              {/* Legs */}
-              <rect 
-                x="40" 
-                y="85" 
-                width="8" 
-                height="50" 
-                rx="2" 
+              <path 
+                d="M45 85 L45 135 C45 145, 40 145, 40 135 L40 85"
                 className={zones.find(z => z.id === 'legs')?.enabled 
                   ? "fill-military-info/20 stroke-military-info animate-pulse" 
-                  : "fill-transparent"} 
+                  : "fill-transparent"}
               />
-              <rect 
-                x="52" 
-                y="85" 
-                width="8" 
-                height="50" 
-                rx="2" 
+              <path 
+                d="M55 85 L55 135 C55 145, 60 145, 60 135 L60 85"
                 className={zones.find(z => z.id === 'legs')?.enabled 
                   ? "fill-military-info/20 stroke-military-info animate-pulse" 
-                  : "fill-transparent"} 
+                  : "fill-transparent"}
               />
               
-              {/* Body outline */}
-              <path d="M50 45 V 85" />
-              <path d="M35 50 H 15" />
-              <path d="M65 50 H 85" />
-              <path d="M44 85 L 44 135" />
-              <path d="M56 85 L 56 135" />
+              <path d="M45 30 L55 30" className="stroke-military-info/50" />
+              <path d="M42 50 L58 50" className="stroke-military-info/50" />
+              <path d="M40 70 L60 70" className="stroke-military-info/50" />
+              <circle cx="50" cy="90" r="2" className="fill-military-info/50" />
+              
+              <circle cx="50" cy="35" r="1" className="fill-military-info" />
+              <circle cx="50" cy="55" r="1" className="fill-military-info" />
+              <circle cx="50" cy="75" r="1" className="fill-military-info" />
             </svg>
             
-            {/* Active indicator */}
             {zones.some(z => z.enabled) && (
               <div className="absolute top-2 right-2 flex items-center bg-military-primary/80 text-military-info text-xs px-2 py-1 rounded-full border border-military-info/50">
                 <Zap size={10} className="mr-1" />
