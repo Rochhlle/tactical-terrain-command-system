@@ -14,7 +14,6 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
         Project KAAL Command Tablet – v1.0 – Confidential Training Tool (iDEX Submission Build)
       </div>
       <div className="flex justify-center items-center mt-2 space-x-4">
-        <span>Mission Verified by SimCom HQ</span>
         <span className="text-military-danger flex items-center">
           <span className="w-1.5 h-1.5 rounded-full bg-military-danger mr-1"></span>
           Safe Mode Available
