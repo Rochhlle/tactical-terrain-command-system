@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import StatusBar from '@/components/ui-military/StatusBar';
 import TerrainEngine from '@/components/ui-military/AdminPanels/TerrainEngine';
@@ -10,6 +9,8 @@ import CommandView from '@/components/ui-military/AdminPanels/CommandView';
 import SessionRecorder from '@/components/ui-military/AdminPanels/SessionRecorder';
 import ChatComms from '@/components/ui-military/AdminPanels/ChatComms';
 import Footer from '@/components/ui-military/Footer';
+import HUDStatusBar from '@/components/ui-military/HUDStatusBar';
+import EventLog from '@/components/ui-military/EventLog';
 import { AlertTriangle } from 'lucide-react';
 import MilitaryButton from '@/components/ui-military/MilitaryButton';
 import { useToast } from '@/hooks/use-toast';
@@ -31,55 +32,50 @@ const DesktopInterface: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-rows-[auto_1fr_auto] bg-military-background">
-      {/* Header Status Bar */}
+    <div className="min-h-screen grid grid-rows-[auto_auto_1fr_auto] bg-military-background">
       <StatusBar 
         systemStatus={systemStatus}
         missionPhase={missionPhase}
         alerts={alerts}
       />
       
-      {/* Main Content Area */}
-      <div className="p-4 overflow-y-auto">
-        <div className="flex flex-col space-y-6">
-          {/* Top Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <TerrainEngine />
-            <UserTracking />
-          </div>
-          
-          {/* Middle Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <SensoryFX />
-            <AudioFX />
-            <AIScenario />
-          </div>
-          
-          {/* Bottom Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <CommandView />
+      <HUDStatusBar mode="COMMAND CENTER" />
+      
+      <div className="p-6 overflow-y-auto space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TerrainEngine />
+          <UserTracking />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <SensoryFX />
+          <AudioFX />
+          <AIScenario />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CommandView />
+          <div className="space-y-6">
             <SessionRecorder />
+            <EventLog />
           </div>
-          
-          {/* Chat Communications */}
-          <ChatComms />
-          
-          {/* Emergency Button */}
-          <div className="flex justify-center my-4">
-            <MilitaryButton
-              variant="danger"
-              glow={true}
-              className="px-8 py-3"
-              onClick={handleEmergencyShutdown}
-            >
-              <AlertTriangle size={18} className="mr-2" />
-              SAFE MODE / EMERGENCY SHUTDOWN
-            </MilitaryButton>
-          </div>
+        </div>
+        
+        <ChatComms />
+        
+        <div className="flex justify-center my-4">
+          <MilitaryButton
+            variant="danger"
+            glow={true}
+            className="px-8 py-3 text-lg hover:bg-military-danger/30 active:scale-95 transition-all duration-200"
+            onClick={handleEmergencyShutdown}
+          >
+            <AlertTriangle size={18} className="mr-2" />
+            EMERGENCY PROTOCOL OVERRIDE
+          </MilitaryButton>
         </div>
       </div>
       
-      {/* Footer */}
       <Footer />
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatusBar from '@/components/ui-military/StatusBar';
 import TerrainList from '@/components/ui-military/TerrainList';
@@ -8,6 +8,8 @@ import DeploymentPanel from '@/components/ui-military/DeploymentPanel';
 import MissionTimeline from '@/components/ui-military/MissionTimeline';
 import QuickCommands from '@/components/ui-military/QuickCommands';
 import Footer from '@/components/ui-military/Footer';
+import HUDStatusBar from '@/components/ui-military/HUDStatusBar';
+import EventLog from '@/components/ui-military/EventLog';
 import { AlertTriangle, ArrowLeft, Settings, Moon, Loader } from 'lucide-react';
 import MilitaryButton from '@/components/ui-military/MilitaryButton';
 import { useToast } from '@/hooks/use-toast';
@@ -31,21 +33,30 @@ const TabletInterface: React.FC = () => {
     setLoadingTerrain(terrainId);
     setShowHUD(true);
     
-    // Simulate loading
+    toast({
+      title: "INITIATING TERRAIN PROTOCOL",
+      description: `Loading tactical environment: ${terrainId.toUpperCase()}`,
+    });
+    
     setTimeout(() => {
       toast({
-        title: "Terrain Selected",
-        description: `Loading terrain: ${terrainId.toUpperCase()}`,
+        title: "TERRAIN SYNC IN PROGRESS",
+        description: "Establishing environmental parameters...",
       });
       
       setTimeout(() => {
         setLoadingTerrain(null);
+        toast({
+          title: "TERRAIN LOADED SUCCESSFULLY",
+          description: "Tactical view ready for operation.",
+          variant: "success",
+        });
         
         setTimeout(() => {
           setShowHUD(false);
         }, 1000);
       }, 2000);
-    }, 500);
+    }, 1500);
   };
   
   const handleEmergencyShutdown = () => {
@@ -58,7 +69,6 @@ const TabletInterface: React.FC = () => {
       variant: "destructive",
     });
     
-    // Reset after 5 seconds
     setTimeout(() => {
       setSafeMode(false);
       setSystemStatus('green');
@@ -73,7 +83,6 @@ const TabletInterface: React.FC = () => {
     'kupwara': 'Kupwara Forest'
   };
 
-  // Sticky top bar component
   const TopControlBar = () => (
     <div className="sticky top-0 z-30 bg-military-primary/90 border-b border-gray-700 py-3 px-4 flex justify-between items-center shadow-md backdrop-blur-sm">
       <div className="flex items-center">
@@ -117,61 +126,58 @@ const TabletInterface: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen grid grid-rows-[auto_1fr_auto] bg-military-background">
-      {/* Header Status Bar */}
+    <div className="min-h-screen grid grid-rows-[auto_auto_1fr_auto] bg-military-background">
       <StatusBar 
         systemStatus={systemStatus}
         missionPhase={missionPhase}
         alerts={alerts}
       />
       
-      {/* Sticky top control bar */}
+      <HUDStatusBar 
+        terrain={selectedTerrainId.toUpperCase()}
+        mode="TACTICAL SIMULATION"
+      />
+      
       <TopControlBar />
       
-      {/* Main Content Area */}
-      <div className="p-6 overflow-y-auto">
-        <div className="flex flex-col space-y-6">
-          {/* Terrain Selection */}
-          <TerrainList 
-            onSelectTerrain={handleSelectTerrain}
-            selectedTerrainId={selectedTerrainId}
-          />
-          
-          {/* Control Panels - 3 column grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <EnvironmentToggle />
-            <ShockSuitPanel />
-            <QuickCommands />
-          </div>
-          
-          {/* Two column layout for command view and tactical details */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <CommandView />
+      <div className="p-6 overflow-y-auto space-y-6">
+        <TerrainList 
+          onSelectTerrain={handleSelectTerrain}
+          selectedTerrainId={selectedTerrainId}
+        />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <EnvironmentToggle />
+          <ShockSuitPanel />
+          <QuickCommands />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CommandView />
+          <div className="space-y-6">
             <TerrainEngine />
+            <EventLog />
           </div>
-          
-          {/* Timeline and Deployment */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <MissionTimeline />
-            <DeploymentPanel />
-          </div>
-          
-          {/* Emergency Button */}
-          <div className="flex justify-center my-6">
-            <MilitaryButton
-              variant="danger"
-              glow={true}
-              className="px-8 py-3 text-lg hover:bg-military-danger/30 active:scale-95 transition-all duration-200"
-              onClick={handleEmergencyShutdown}
-            >
-              <AlertTriangle size={18} className="mr-2" />
-              SAFE MODE / EMERGENCY SHUTDOWN
-            </MilitaryButton>
-          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <MissionTimeline />
+          <DeploymentPanel />
+        </div>
+        
+        <div className="flex justify-center my-6">
+          <MilitaryButton
+            variant="danger"
+            glow={true}
+            className="px-8 py-3 text-lg hover:bg-military-danger/30 active:scale-95 transition-all duration-200"
+            onClick={handleEmergencyShutdown}
+          >
+            <AlertTriangle size={18} className="mr-2" />
+            SAFE MODE / EMERGENCY SHUTDOWN
+          </MilitaryButton>
         </div>
       </div>
       
-      {/* Safe Mode Warning Banner */}
       {safeMode && (
         <div className="fixed inset-x-0 top-16 z-50 bg-military-danger/20 border-y border-military-danger/50 py-2 text-center animate-pulse">
           <div className="flex items-center justify-center text-military-danger">
@@ -181,17 +187,24 @@ const TabletInterface: React.FC = () => {
         </div>
       )}
       
-      {/* HUD Overlay for Loading */}
       {showHUD && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="text-military-info text-lg font-jetbrains border-2 border-military-info/50 px-8 py-6 rounded-md bg-military-primary/90 shadow-lg">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="text-military-info font-jetbrains border-2 border-military-info/50 p-8 rounded-md bg-military-primary/90 shadow-lg max-w-md w-full">
             <div className="flex flex-col items-center">
-              <Loader size={32} className="animate-spin mb-4 text-military-info" />
-              <div className="text-xl mb-1">Loading Terrain Data...</div>
+              <Loader size={40} className="animate-spin mb-6 text-military-info" />
+              <div className="text-xl mb-3 text-center">Initializing Operation Protocol</div>
               {loadingTerrain && (
-                <div className="text-md mt-2 text-military-info/90 flex flex-col items-center">
-                  <span>{terrainNames[loadingTerrain as keyof typeof terrainNames]}</span>
-                  <span className="text-xs mt-2 text-gray-400">Tactical Simulation Environment</span>
+                <div className="space-y-4 w-full">
+                  <div className="text-md text-military-info/90 text-center">
+                    <div className="font-bold mb-2">{terrainNames[loadingTerrain as keyof typeof terrainNames]}</div>
+                    <div className="text-sm text-gray-400">Tactical Simulation Environment</div>
+                  </div>
+                  <div className="w-full bg-military-primary/50 h-1 rounded-full overflow-hidden">
+                    <div className="h-full bg-military-info/50 animate-pulse" style={{ width: '60%' }}></div>
+                  </div>
+                  <div className="text-xs text-center text-gray-400">
+                    Loading environmental parameters...
+                  </div>
                 </div>
               )}
             </div>
@@ -199,7 +212,6 @@ const TabletInterface: React.FC = () => {
         </div>
       )}
       
-      {/* Footer */}
       <Footer />
     </div>
   );
