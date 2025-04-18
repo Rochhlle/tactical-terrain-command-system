@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import StatusBar from '@/components/ui-military/StatusBar';
 import TerrainList from '@/components/ui-military/TerrainList';
 import EnvironmentToggle from '@/components/ui-military/EnvironmentToggle';
@@ -15,6 +15,7 @@ import CommandView from '@/components/ui-military/AdminPanels/CommandView';
 import TerrainEngine from '@/components/ui-military/AdminPanels/TerrainEngine';
 
 const TabletInterface: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedTerrainId, setSelectedTerrainId] = useState<string>('siachen');
   const [systemStatus, setSystemStatus] = useState<'green' | 'yellow' | 'red'>('green');
   const [missionPhase, setMissionPhase] = useState('Planning');
@@ -76,7 +77,12 @@ const TabletInterface: React.FC = () => {
   const TopControlBar = () => (
     <div className="sticky top-0 z-30 bg-military-primary/90 border-b border-gray-700 py-3 px-4 flex justify-between items-center shadow-md backdrop-blur-sm">
       <div className="flex items-center">
-        <MilitaryButton size="sm" variant="default" className="mr-3">
+        <MilitaryButton 
+          size="sm" 
+          variant="default" 
+          className="mr-3"
+          onClick={() => navigate('/')}
+        >
           <ArrowLeft size={16} />
           Back
         </MilitaryButton>
