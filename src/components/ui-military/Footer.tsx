@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { Info, Shield } from 'lucide-react';
+import { Info, Shield, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const Footer: React.FC<{ className?: string }> = ({ className }) => {
   return (
-    <div className={cn("px-5 py-3 text-xs text-gray-400 text-center border-t border-gray-700 flex flex-col items-center bg-military-primary/60", className)}>
+    <div className={cn("px-5 py-4 text-xs text-gray-400 text-center border-t border-gray-700 flex flex-col items-center bg-military-primary/70 shadow-md", className)}>
       <div className="flex items-center mb-2">
         <img 
           src="/lovable-uploads/e8bf466e-32fa-4383-8a40-e80668c31ae9.png" 
@@ -16,7 +16,7 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="inline-block px-4 py-1.5 border border-military-info/20 rounded-sm bg-military-primary/50 font-jetbrains">
+              <div className="inline-block px-4 py-1.5 border border-military-info/20 rounded-sm bg-military-primary/70 font-jetbrains">
                 KAAL Command Nexus v1.0 – DRDO/ARMY Prototype UI
               </div>
             </TooltipTrigger>
@@ -36,7 +36,7 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
           Tactical System Active
         </span>
         <span className="text-gray-500 flex items-center">
-          <Info size={10} className="mr-1" />
+          <Database size={10} className="mr-1" />
           <span className="hidden md:inline">Confidential Training Tool</span>
           <span className="inline md:hidden">Confidential</span>
         </span>

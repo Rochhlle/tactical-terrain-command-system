@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { MapPin, Check } from 'lucide-react';
+import { MapPin, Check, Moon, Sun, Wind, Thermometer } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TerrainCardProps {
   name: string;
   type: string;
   location: string;
+  environment?: 'Day' | 'Night' | 'Storm' | 'Extreme';
   image?: string;
   isNew?: boolean;
   isSelected?: boolean;
@@ -18,17 +19,26 @@ const TerrainCard: React.FC<TerrainCardProps> = ({
   name, 
   type,
   location,
+  environment = 'Day',
   image, 
   isNew = false, 
   isSelected = false,
   isLoading = false,
   onClick 
 }) => {
+  // Environment icon mapping
+  const environmentIcon = {
+    'Day': <Sun size={14} className="mr-1 text-yellow-400" />,
+    'Night': <Moon size={14} className="mr-1 text-indigo-300" />,
+    'Storm': <Wind size={14} className="mr-1 text-blue-400" />,
+    'Extreme': <Thermometer size={14} className="mr-1 text-red-400" />
+  };
+
   return (
     <div 
       className={cn(
-        "military-card relative cursor-pointer transition-all duration-300 h-48 flex flex-col justify-end overflow-hidden group",
-        isSelected ? "border-military-info/50 ring-1 ring-military-info/30" : "hover:border-gray-600",
+        "military-card relative cursor-pointer transition-all duration-300 h-52 flex flex-col justify-end overflow-hidden group shadow-md",
+        isSelected ? "border-military-info/50 ring-1 ring-military-info/30" : "hover:border-gray-600 hover:scale-[1.02]",
       )}
       onClick={onClick}
     >
@@ -43,9 +53,9 @@ const TerrainCard: React.FC<TerrainCardProps> = ({
         </div>
       )}
       
-      <div className="z-10 p-3">
-        <div className="flex items-start justify-between mb-1">
-          <h4 className="font-bold text-lg leading-tight">{name}</h4>
+      <div className="z-10 p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h4 className="font-bold text-lg leading-tight font-jetbrains">{name}</h4>
           {isSelected && (
             <div className="bg-military-info/20 border border-military-info/40 rounded-full h-5 w-5 flex items-center justify-center">
               <Check size={12} className="text-military-info" />
@@ -53,15 +63,22 @@ const TerrainCard: React.FC<TerrainCardProps> = ({
           )}
         </div>
         
-        <div className="flex items-center mb-1 text-sm text-gray-300">
+        <div className="flex items-center mb-2 text-sm text-gray-300">
           <MapPin size={14} className="mr-1 text-military-info/70" />
           {location}
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-xs px-2 py-0.5 bg-military-primary/80 border border-gray-700 rounded">
-            {type}
-          </span>
+          <div className="flex gap-2">
+            <span className="text-xs px-2 py-0.5 bg-military-primary/80 border border-gray-700 rounded">
+              {type}
+            </span>
+            
+            <span className="text-xs px-2 py-0.5 bg-military-primary/80 border border-gray-700 rounded flex items-center">
+              {environmentIcon[environment]}
+              {environment}
+            </span>
+          </div>
           
           {isLoading && (
             <span className="text-xs text-military-info flex items-center animate-pulse">
