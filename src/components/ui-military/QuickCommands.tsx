@@ -1,116 +1,148 @@
 
-import React from 'react';
-import { CloudFog, ZapOff, Pause, VolumeX } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from 'react';
+import { Terminal, Send, AlertTriangle, CheckSquare, ChevronDown, ChevronUp } from 'lucide-react';
+import MilitaryButton from './MilitaryButton';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-interface CommandButtonProps {
-  icon: React.ReactNode;
-  label: string;
-  onClick: () => void;
-  variant?: 'default' | 'alert';
+interface CommandOption {
+  id: string;
+  name: string;
+  description: string;
+  isAlert?: boolean;
 }
 
-const CommandButton: React.FC<CommandButtonProps> = ({ 
-  icon, 
-  label, 
-  onClick,
-  variant = 'default'
-}) => {
-  return (
-    <button
-      className={cn(
-        "flex flex-col items-center justify-center p-4 border rounded-md transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]", 
-        variant === 'default' 
-          ? "bg-military-primary/70 border-military-info/30 hover:border-military-info/60 hover:shadow-[0_0_15px_rgba(30,174,219,0.3)]" 
-          : "bg-military-alert/10 border-military-alert/50 hover:border-military-alert/80 hover:shadow-[0_0_15px_rgba(249,115,22,0.3)]"
-      )}
-      onClick={onClick}
-    >
-      <div className={cn(
-        "w-12 h-12 flex items-center justify-center rounded-full mb-2 border",
-        variant === 'default' 
-          ? "border-military-info/50 bg-military-info/10" 
-          : "border-military-alert/50 bg-military-alert/10"
-      )}>
-        {icon}
-      </div>
-      <span className="text-sm font-medium">{label}</span>
-    </button>
-  );
-};
-
 const QuickCommands: React.FC<{ className?: string }> = ({ className }) => {
-  const [missionPaused, setMissionPaused] = React.useState(false);
-  const [fxMuted, setFxMuted] = React.useState(false);
-  const { toast } = useToast();
+  const [selectedCommandId, setSelectedCommandId] = useState('refresh');
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [commandRunning, setCommandRunning] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   
-  const handleTriggerFog = () => {
-    toast({ 
-      title: "Deploying Fog", 
-      description: "Fog simulation activated in all zones." 
-    });
+  const commandOptions: CommandOption[] = [
+    { id: 'refresh', name: 'Refresh Tactical View', description: 'Reload current terrain data' },
+    { id: 'reassign', name: 'Reassign Orders', description: 'Change unit orders and behaviors' },
+    { id: 'protocol', name: 'Force Protocol', description: 'Override standard operation procedures', isAlert: true },
+    { id: 'signal', name: 'Boost Signal', description: 'Enhance team communication in low-signal areas' },
+  ];
+  
+  const selectedCommand = commandOptions.find(cmd => cmd.id === selectedCommandId);
+  
+  const handleSelectCommand = (commandId: string) => {
+    setSelectedCommandId(commandId);
   };
   
-  const handleSimulateBlast = () => {
-    toast({ 
-      title: "Blast Simulation", 
-      description: "Initiating blast simulation sequence.", 
-      variant: "destructive"
-    });
-  };
-  
-  const handlePauseMission = () => {
-    setMissionPaused(!missionPaused);
-    toast({ 
-      title: missionPaused ? "Mission Resumed" : "Mission Paused", 
-      description: missionPaused ? "Mission timeline is now active." : "Mission timeline has been paused.",
-      variant: missionPaused ? "default" : "destructive" 
-    });
-  };
-  
-  const handleMuteFx = () => {
-    setFxMuted(!fxMuted);
-    toast({ 
-      title: fxMuted ? "Effects Unmuted" : "Effects Muted", 
-      description: fxMuted ? "All sensory effects are now active." : "All sensory effects have been muted." 
-    });
+  const executeCommand = () => {
+    if (commandRunning) return;
+    
+    setCommandRunning(true);
+    setCommandHistory([...commandHistory, selectedCommand?.name || '']);
+    
+    // Simulate command execution time
+    setTimeout(() => {
+      setCommandRunning(false);
+    }, 1500);
   };
   
   return (
-    <div className={cn("military-panel p-4", className)}>
-      <h3 className="text-lg font-bold mb-4 border-b border-military-info/30 pb-2">
-        Quick Tactical Commands
+    <div className={cn("military-panel", className)}>
+      <h3 className="military-section-header flex justify-between items-center">
+        <div className="flex items-center">
+          <Terminal size={18} className="mr-2 text-military-info" />
+          Field Command Console
+        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button 
+                className="text-gray-400 hover:text-gray-300"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="text-xs">{isExpanded ? 'Collapse' : 'Expand'} command console</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </h3>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <CommandButton 
-          icon={<CloudFog size={24} className="text-military-info" />} 
-          label="Trigger Fog" 
-          onClick={handleTriggerFog}
-        />
-        
-        <CommandButton 
-          icon={<ZapOff size={24} className="text-military-alert" />} 
-          label="Simulate Blast" 
-          onClick={handleSimulateBlast}
-          variant="alert"
-        />
-        
-        <CommandButton 
-          icon={<Pause size={24} className={missionPaused ? "text-military-alert" : "text-military-info"} />} 
-          label={missionPaused ? "Resume Mission" : "Pause Mission"} 
-          onClick={handlePauseMission}
-          variant={missionPaused ? "alert" : "default"}
-        />
-        
-        <CommandButton 
-          icon={<VolumeX size={24} className={fxMuted ? "text-military-alert" : "text-military-info"} />} 
-          label={fxMuted ? "Unmute FX" : "Mute FX"} 
-          onClick={handleMuteFx}
-          variant={fxMuted ? "alert" : "default"}
-        />
-      </div>
+      {isExpanded && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-2">
+            {commandOptions.map(command => (
+              <TooltipProvider key={command.id}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div 
+                      className={cn(
+                        "border p-3 cursor-pointer transition-all duration-200 rounded text-sm",
+                        selectedCommandId === command.id 
+                          ? command.isAlert
+                            ? "bg-military-alert/10 border-military-alert/40"
+                            : "bg-military-info/10 border-military-info/40"
+                          : "bg-military-primary/80 border-gray-700 hover:border-gray-600"
+                      )}
+                      onClick={() => handleSelectCommand(command.id)}
+                    >
+                      <div className="flex items-center">
+                        {command.isAlert ? (
+                          <AlertTriangle size={14} className="text-military-alert mr-2" />
+                        ) : (
+                          <CheckSquare size={14} className="text-military-info mr-2" />
+                        )}
+                        {command.name}
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p className="text-xs">{command.description}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </div>
+          
+          <div className="flex justify-end">
+            <MilitaryButton
+              variant={selectedCommand?.isAlert ? "alert" : "info"}
+              glow={selectedCommand?.isAlert}
+              disabled={commandRunning}
+              className="flex items-center"
+              onClick={executeCommand}
+            >
+              {commandRunning ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Executing...
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  <Send size={14} className="mr-2" />
+                  Execute Command
+                </span>
+              )}
+            </MilitaryButton>
+          </div>
+          
+          {commandHistory.length > 0 && (
+            <div className="border border-gray-700 rounded bg-military-primary/40 p-2 mt-2">
+              <div className="text-xs text-gray-400 mb-1">Command History:</div>
+              <div className="space-y-1 text-xs max-h-16 overflow-y-auto">
+                {commandHistory.map((cmd, index) => (
+                  <div key={index} className="flex">
+                    <span className="text-military-info mr-2">&gt;</span>
+                    <span>{cmd}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

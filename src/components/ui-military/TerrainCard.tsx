@@ -1,96 +1,85 @@
 
 import React from 'react';
-import { MapPin, CloudRain, AlertTriangle } from 'lucide-react';
+import { MapPin, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type ThreatLevel = 'Low' | 'Medium' | 'High';
-
 interface TerrainCardProps {
-  id: string;
   name: string;
+  type: string;
   location: string;
-  weather: string;
-  threatLevel: ThreatLevel;
-  imageUrl: string;
-  onClick: (id: string) => void;
-  selected?: boolean;
+  image?: string;
+  isNew?: boolean;
+  isSelected?: boolean;
+  isLoading?: boolean;
+  onClick?: () => void;
 }
 
-const TerrainCard: React.FC<TerrainCardProps> = ({
-  id,
-  name,
+const TerrainCard: React.FC<TerrainCardProps> = ({ 
+  name, 
+  type,
   location,
-  weather,
-  threatLevel,
-  imageUrl,
-  onClick,
-  selected = false
+  image, 
+  isNew = false, 
+  isSelected = false,
+  isLoading = false,
+  onClick 
 }) => {
-  const getThreatBadgeClass = (level: ThreatLevel): string => {
-    switch (level) {
-      case 'Low':
-        return 'bg-military-success/20 text-military-success border-military-success/50';
-      case 'Medium':
-        return 'bg-military-warning/20 text-military-warning border-military-warning/50';
-      case 'High':
-        return 'bg-military-danger/20 text-military-danger border-military-danger/50';
-      default:
-        return 'bg-military-success/20 text-military-success border-military-success/50';
-    }
-  };
-
   return (
     <div 
       className={cn(
-        "military-card cursor-pointer w-[300px] h-[220px] flex-shrink-0",
-        selected && "border-military-info border-2"
+        "military-card relative cursor-pointer transition-all duration-300 h-48 flex flex-col justify-end overflow-hidden group",
+        isSelected ? "border-military-info/50 ring-1 ring-military-info/30" : "hover:border-gray-600",
       )}
-      onClick={() => onClick(id)}
+      onClick={onClick}
     >
-      <div className="h-[70%] relative overflow-hidden">
-        <img 
-          src={imageUrl} 
-          alt={name} 
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-        />
-        
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-military-background/90 to-transparent"></div>
-        
-        {/* Location tag */}
-        <div className="absolute top-2 left-2 flex items-center bg-military-primary/80 backdrop-blur-sm rounded px-2 py-1 text-xs border border-military-info/30">
-          <MapPin size={12} className="mr-1 text-military-info" />
-          <span>{location}</span>
+      {image && (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-military-primary via-military-primary/80 to-transparent z-10"></div>
+          <img 
+            src={image} 
+            alt={name}
+            className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+          />
+        </div>
+      )}
+      
+      <div className="z-10 p-3">
+        <div className="flex items-start justify-between mb-1">
+          <h4 className="font-bold text-lg leading-tight">{name}</h4>
+          {isSelected && (
+            <div className="bg-military-info/20 border border-military-info/40 rounded-full h-5 w-5 flex items-center justify-center">
+              <Check size={12} className="text-military-info" />
+            </div>
+          )}
         </div>
         
-        {/* Weather tag */}
-        <div className="absolute top-2 right-2 flex items-center bg-military-primary/80 backdrop-blur-sm rounded px-2 py-1 text-xs border border-military-info/30">
-          <CloudRain size={12} className="mr-1 text-military-info" />
-          <span>{weather}</span>
+        <div className="flex items-center mb-1 text-sm text-gray-300">
+          <MapPin size={14} className="mr-1 text-military-info/70" />
+          {location}
         </div>
         
-        {/* Threat level badge */}
-        <div className={cn(
-          "absolute bottom-2 right-2 flex items-center rounded px-2 py-1 text-xs border",
-          getThreatBadgeClass(threatLevel)
-        )}>
-          <AlertTriangle size={12} className="mr-1" />
-          <span>{threatLevel} Threat</span>
+        <div className="flex items-center justify-between">
+          <span className="text-xs px-2 py-0.5 bg-military-primary/80 border border-gray-700 rounded">
+            {type}
+          </span>
+          
+          {isLoading && (
+            <span className="text-xs text-military-info flex items-center animate-pulse">
+              <svg className="animate-spin mr-1 h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Loading...
+            </span>
+          )}
         </div>
       </div>
       
-      <div className="h-[30%] p-2 flex flex-col justify-between">
-        <h3 className="font-bold text-military-text">{name}</h3>
-        
-        {/* Interactive indicator */}
-        <div className="flex justify-between items-center">
-          <span className="text-xs text-military-info">ID: {id.toUpperCase()}</span>
-          <span className="text-xs flex items-center">
-            <span className="w-2 h-2 rounded-full bg-military-info mr-1 animate-pulse"></span>
-            Ready
-          </span>
+      {isNew && (
+        <div className="absolute top-2 right-2 bg-military-alert/90 text-white text-xs px-2 py-0.5 rounded">
+          NEW
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -1,106 +1,125 @@
+
 import React from 'react';
-import { Clock, AlertTriangle, Shield, Bell } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Activity, Bell, Shield, Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface StatusBarProps {
-  systemStatus: 'green' | 'yellow' | 'red';
-  missionPhase: string;
+  systemStatus?: 'green' | 'yellow' | 'red';
+  missionPhase?: string;
   alerts?: number;
+  className?: string;
 }
 
 const StatusBar: React.FC<StatusBarProps> = ({ 
-  systemStatus = 'green', 
-  missionPhase = 'Planning', 
-  alerts = 0 
+  systemStatus = 'green',
+  missionPhase = 'Planning',
+  alerts = 0,
+  className 
 }) => {
-  const [time, setTime] = React.useState(new Date());
-  const { toast } = useToast();
+  const now = new Date();
+  const timeString = now.toLocaleTimeString('en-US', { 
+    hour12: false, 
+    hour: '2-digit', 
+    minute: '2-digit',
+    second: '2-digit'
+  });
+  const dateString = now.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
   
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, []);
-  
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  };
-
-  const handleAlertClick = () => {
-    if (alerts > 0) {
-      toast({
-        title: "System Alerts",
-        description: `${alerts} alerts require your attention.`,
-        variant: "destructive",
-      });
+  const getStatusClass = () => {
+    switch (systemStatus) {
+      case 'green': return 'text-military-success';
+      case 'yellow': return 'text-military-warning';
+      case 'red': return 'text-military-danger';
+      default: return 'text-military-success';
     }
   };
   
+  const getStatusLabel = () => {
+    switch (systemStatus) {
+      case 'green': return 'OPERATIONAL';
+      case 'yellow': return 'DEGRADED';
+      case 'red': return 'CRITICAL';
+      default: return 'OPERATIONAL';
+    }
+  };
+
   return (
-    <div className="military-panel flex items-center justify-between px-4 py-2 text-sm">
+    <div className={cn(
+      "bg-military-primary/90 border-b border-gray-700 px-4 py-2 flex justify-between items-center shadow-md",
+      className
+    )}>
       <div className="flex items-center space-x-6">
-        <div className="flex items-center">
-          <img 
-            src="/lovable-uploads/e8bf466e-32fa-4383-8a40-e80668c31ae9.png" 
-            alt="KAAL Command Nexus Logo" 
-            className="h-8 w-8 mr-3" 
-          />
-          <span className="font-bold tracking-wider">KAAL COMMAND NEXUS</span>
-        </div>
-        <div className="flex items-center">
-          <span className="mr-2">System Status:</span>
-          {systemStatus === 'green' && (
-            <span className="flex items-center text-military-success">
-              <span className="status-green"></span> GREEN
-            </span>
-          )}
-          {systemStatus === 'yellow' && (
-            <span className="flex items-center text-military-warning animate-pulse">
-              <span className="status-yellow"></span> YELLOW
-            </span>
-          )}
-          {systemStatus === 'red' && (
-            <span className="flex items-center text-military-danger animate-pulse">
-              <span className="status-red"></span> RED
-            </span>
-          )}
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center">
+                <Activity size={16} className={cn("mr-2", getStatusClass())} />
+                <span className={cn("font-medium", getStatusClass())}>
+                  System Status: {getStatusLabel()}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p className="text-xs">All systems {systemStatus === 'green' ? 'nominal' : systemStatus === 'yellow' ? 'with warnings' : 'in alert state'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center">
+                <Shield size={16} className="mr-2 text-military-info" />
+                <span>Mission Phase: <span className="font-medium text-military-info">{missionPhase}</span></span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p className="text-xs">Current operation stage</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       
       <div className="flex items-center space-x-6">
-        <div className="flex items-center">
-          <Clock size={16} className="mr-2 text-military-info" />
-          <span className="font-mono">{formatTime(time)}</span>
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center">
+                <Clock size={16} className="mr-2 text-gray-400" />
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-400">{dateString}</span>
+                  <span className="font-medium">{timeString} HRS</span>
+                </div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p className="text-xs">Mission clock</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         
-        <div className="flex items-center">
-          <Shield size={16} className="mr-2 text-military-info" />
-          <span>Phase: {missionPhase}</span>
-        </div>
-        
-        <div 
-          className="flex items-center cursor-pointer hover:text-military-info transition-colors" 
-          onClick={handleAlertClick}
-        >
-          {alerts > 0 ? (
-            <>
-              <Bell size={16} className="mr-2 text-military-alert animate-pulse" />
-              <span className="text-military-alert">{alerts} Alerts</span>
-            </>
-          ) : (
-            <>
-              <Bell size={16} className="mr-2" />
-              <span>No Alerts</span>
-            </>
-          )}
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative">
+                <Bell size={16} className={cn(alerts > 0 ? "text-military-alert" : "text-gray-400")} />
+                {alerts > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-military-alert text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
+                    {alerts}
+                  </span>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p className="text-xs">{alerts > 0 ? `${alerts} system alerts` : 'No active alerts'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );

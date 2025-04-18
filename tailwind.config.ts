@@ -65,7 +65,7 @@ export default {
 				},
 				// Military theme colors
 				military: {
-					background: '#131A2A',
+					background: '#1c1c1c',
 					primary: '#1A2A40',
 					info: '#1EAEDB',
 					alert: '#F97316',
@@ -91,21 +91,21 @@ export default {
 				},
 				'pulse-glow': {
 					'0%, 100%': { 
-						'box-shadow': '0 0 5px rgba(30, 174, 219, 0.5)',
+						'box-shadow': '0 0 5px rgba(30, 174, 219, 0.3)',
 						'opacity': '0.9' 
 					},
 					'50%': { 
-						'box-shadow': '0 0 20px rgba(30, 174, 219, 0.8)',
+						'box-shadow': '0 0 15px rgba(30, 174, 219, 0.5)',
 						'opacity': '1' 
 					}
 				},
 				'alert-pulse': {
 					'0%, 100%': { 
-						'box-shadow': '0 0 5px rgba(249, 115, 22, 0.5)',
+						'box-shadow': '0 0 5px rgba(249, 115, 22, 0.3)',
 						'opacity': '0.9' 
 					},
 					'50%': { 
-						'box-shadow': '0 0 20px rgba(249, 115, 22, 0.8)',
+						'box-shadow': '0 0 15px rgba(249, 115, 22, 0.5)',
 						'opacity': '1' 
 					}
 				},
@@ -128,7 +128,7 @@ export default {
 				'data-flow': 'data-flow 4s ease-in-out infinite'
 			},
 			backgroundImage: {
-				'grid-pattern': 'linear-gradient(rgba(62, 77, 110, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(62, 77, 110, 0.07) 1px, transparent 1px)',
+				'grid-pattern': 'linear-gradient(rgba(62, 77, 110, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(62, 77, 110, 0.05) 1px, transparent 1px)',
 				'camo-overlay': 'url("/camo-pattern.png")',
 				'carbon-fiber': 'url("/carbon-fiber.png")'
 			},

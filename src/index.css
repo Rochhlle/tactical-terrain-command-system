@@ -93,23 +93,26 @@
   }
 
   body {
-    @apply bg-military-background text-military-text font-jetbrains;
+    @apply bg-military-background text-gray-300 font-roboto-mono;
     overflow-x: hidden;
+    background-image: url('/camo-pattern.png');
+    background-blend-mode: overlay;
+    background-size: 100px;
   }
 
   /* Military-grade UI Components */
   .military-panel {
-    @apply bg-military-primary/90 border border-military-info/30 rounded-md backdrop-blur-sm;
-    box-shadow: 0 0 10px rgba(30, 174, 219, 0.1);
+    @apply bg-military-primary/90 border border-gray-700 rounded-md backdrop-blur-sm p-6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .military-card {
-    @apply bg-military-primary/90 border border-military-info/30 rounded-md overflow-hidden transition-all duration-300;
+    @apply bg-military-primary/90 border border-gray-700 rounded-md overflow-hidden transition-all duration-300 p-5;
   }
 
   .military-card:hover {
-    box-shadow: 0 0 15px rgba(30, 174, 219, 0.2);
-    @apply border-military-info/50;
+    box-shadow: 0 0 12px rgba(30, 174, 219, 0.15);
+    @apply border-military-info/30 transform scale-[1.01];
   }
 
   .military-button {
@@ -117,8 +120,8 @@
   }
 
   .military-button:hover {
-    @apply bg-military-primary/80 border-military-info/60;
-    box-shadow: 0 0 10px rgba(30, 174, 219, 0.3);
+    @apply bg-military-primary/80 border-military-info/60 transform scale-[1.02];
+    box-shadow: 0 0 8px rgba(30, 174, 219, 0.2);
   }
 
   .military-button.alert {
@@ -126,21 +129,21 @@
   }
 
   .military-button.alert:hover {
-    @apply border-military-alert/80;
-    box-shadow: 0 0 10px rgba(249, 115, 22, 0.3);
+    @apply border-military-alert/80 bg-military-alert/10;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.2);
   }
 
   .military-input {
-    @apply bg-military-primary/50 border border-military-info/30 rounded px-3 py-2 text-military-text outline-none;
+    @apply bg-military-primary/50 border border-gray-700 rounded px-3 py-2 text-gray-300 outline-none;
   }
 
   .military-input:focus {
-    @apply border-military-info/70;
-    box-shadow: 0 0 8px rgba(30, 174, 219, 0.2);
+    @apply border-military-info/40;
+    box-shadow: 0 0 6px rgba(30, 174, 219, 0.15);
   }
 
   .military-select {
-    @apply bg-military-primary/50 border border-military-info/30 rounded px-3 py-2 text-military-text outline-none;
+    @apply bg-military-primary/50 border border-gray-700 rounded px-3 py-2 text-gray-300 outline-none;
   }
 
   .grid-bg {
@@ -151,8 +154,8 @@
   .scanner-line {
     height: 2px;
     width: 100%;
-    @apply bg-military-info/60;
-    box-shadow: 0 0 10px rgba(30, 174, 219, 0.8);
+    @apply bg-military-info/40;
+    box-shadow: 0 0 8px rgba(30, 174, 219, 0.6);
     position: absolute;
     top: 0;
     left: 0;
@@ -162,8 +165,8 @@
   .data-flow {
     height: 1px;
     width: 30%;
-    @apply bg-military-info/60;
-    box-shadow: 0 0 8px rgba(30, 174, 219, 0.8);
+    @apply bg-military-info/40;
+    box-shadow: 0 0 6px rgba(30, 174, 219, 0.6);
     position: absolute;
     top: 10px;
     left: 0;
@@ -173,23 +176,23 @@
   /* Status indicators */
   .status-green {
     @apply bg-military-success rounded-full h-3 w-3 inline-block mr-2;
-    box-shadow: 0 0 8px rgba(46, 125, 50, 0.8);
+    box-shadow: 0 0 6px rgba(46, 125, 50, 0.6);
   }
 
   .status-yellow {
     @apply bg-military-warning rounded-full h-3 w-3 inline-block mr-2;
-    box-shadow: 0 0 8px rgba(255, 183, 77, 0.8);
+    box-shadow: 0 0 6px rgba(255, 183, 77, 0.6);
   }
 
   .status-red {
     @apply bg-military-danger rounded-full h-3 w-3 inline-block mr-2;
-    box-shadow: 0 0 8px rgba(198, 40, 40, 0.8);
+    box-shadow: 0 0 6px rgba(198, 40, 40, 0.6);
   }
 
   /* Scrollbar styling */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
@@ -197,10 +200,40 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-military-info/30 rounded;
+    @apply bg-military-info/20 rounded;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-military-info/50;
+    @apply bg-military-info/40;
+  }
+  
+  /* Military section headers */
+  .military-section-header {
+    @apply text-xl font-bold mb-4 border-b border-gray-700 pb-2 flex items-center;
+  }
+  
+  /* HUD overlay */
+  .hud-overlay {
+    @apply absolute inset-0 bg-black/50 flex items-center justify-center z-50;
+  }
+  
+  .hud-loading {
+    @apply text-military-info text-lg font-jetbrains border-2 border-military-info/50 px-8 py-4 rounded-md;
+    box-shadow: 0 0 20px rgba(30, 174, 219, 0.3);
+    background: linear-gradient(180deg, rgba(26, 42, 64, 0.8) 0%, rgba(19, 26, 42, 0.9) 100%);
+  }
+  
+  /* Tooltip styles */
+  .military-tooltip {
+    @apply relative inline-flex group;
+  }
+  
+  .military-tooltip-text {
+    @apply absolute bottom-full left-1/2 transform -translate-x-1/2 -translate-y-2 px-3 py-1.5 bg-military-primary/90 border border-military-info/30 rounded text-xs text-military-text whitespace-nowrap opacity-0 invisible transition-all duration-200 z-50;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .military-tooltip:hover .military-tooltip-text {
+    @apply opacity-100 visible -translate-y-1;
   }
 }

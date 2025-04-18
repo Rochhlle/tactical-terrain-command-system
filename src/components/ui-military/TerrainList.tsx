@@ -1,138 +1,134 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import TerrainCard from './TerrainCard';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Map, Loader } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const terrainData = [
-  {
-    id: 'siachen',
-    name: 'Siachen Glacier',
-    location: 'Eastern Karakoram',
-    weather: 'Snowstorm',
-    threatLevel: 'High' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'galwan',
-    name: 'Galwan Valley',
-    location: 'Eastern Ladakh',
-    weather: 'Clear',
-    threatLevel: 'Medium' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'drass',
-    name: 'Drass Sector',
-    location: 'Western Ladakh',
-    weather: 'Cold',
-    threatLevel: 'Medium' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'kupwara',
-    name: 'LOC - Kupwara',
-    location: 'Kashmir',
-    weather: 'Foggy',
-    threatLevel: 'High' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'thar',
-    name: 'Thar Desert',
-    location: 'Rajasthan',
-    weather: 'Hot',
-    threatLevel: 'Low' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'pangong',
-    name: 'Pangong Lake',
-    location: 'Ladakh',
-    weather: 'Cold',
-    threatLevel: 'Medium' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'northeast',
-    name: 'North-East Jungle',
-    location: 'Arunachal',
-    weather: 'Rainy',
-    threatLevel: 'Medium' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'urban',
-    name: 'Urban Grid',
-    location: 'Delhi/Mumbai',
-    weather: 'Overcast',
-    threatLevel: 'Low' as const,
-    imageUrl: 'https://images.unsplash.com/photo-1573843981713-197784383079?auto=format&fit=crop&w=600&q=80',
-  }
-];
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface TerrainListProps {
-  onSelectTerrain: (terrainId: string) => void;
+  onSelectTerrain?: (terrainId: string) => void;
   selectedTerrainId?: string;
   className?: string;
 }
 
+interface Terrain {
+  id: string;
+  name: string;
+  location: string;
+  type: string;
+  image: string;
+  isNew?: boolean;
+}
+
 const TerrainList: React.FC<TerrainListProps> = ({ 
-  onSelectTerrain, 
-  selectedTerrainId,
+  onSelectTerrain,
+  selectedTerrainId = '',
   className 
 }) => {
-  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const [loadingTerrain, setLoadingTerrain] = useState<string | null>(null);
+  const [showHUD, setShowHUD] = useState(false);
   
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -320, behavior: 'smooth' });
-    }
-  };
+  const terrains: Terrain[] = [
+    { 
+      id: 'siachen', 
+      name: 'Siachen Glacier', 
+      location: 'Eastern Karakoram',
+      type: 'Snow', 
+      image: 'https://images.unsplash.com/photo-1482881497185-d4a9ddbe4151?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2369&q=80',
+    },
+    { 
+      id: 'galwan', 
+      name: 'Galwan Valley', 
+      location: 'Eastern Ladakh LAC',
+      type: 'Mountain', 
+      image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80',
+    },
+    { 
+      id: 'thar', 
+      name: 'Thar Desert', 
+      location: 'Rajasthan Border',
+      type: 'Desert', 
+      image: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80',
+      isNew: true,
+    },
+    { 
+      id: 'kupwara', 
+      name: 'Kupwara Forest', 
+      location: 'Northern Kashmir',
+      type: 'Forest', 
+      image: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
+    },
+  ];
   
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-    }
-  };
-  
-  return (
-    <div className={className}>
-      <h2 className="text-2xl font-bold mb-4">Select Strategic Terrain</h2>
+  const handleSelectTerrain = (terrainId: string) => {
+    if (selectedTerrainId === terrainId) return;
+    
+    setLoadingTerrain(terrainId);
+    setShowHUD(true);
+    
+    setTimeout(() => {
+      if (onSelectTerrain) {
+        onSelectTerrain(terrainId);
+      }
       
-      <div className="relative">
-        {/* Scroll buttons */}
-        <button 
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-military-primary/80 p-2 rounded-full border border-military-info/30 hover:border-military-info/60 transition-all"
-          onClick={scrollLeft}
-        >
-          <ChevronLeft size={20} className="text-military-info" />
-        </button>
+      setTimeout(() => {
+        setLoadingTerrain(null);
         
-        <button 
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-military-primary/80 p-2 rounded-full border border-military-info/30 hover:border-military-info/60 transition-all"
-          onClick={scrollRight}
-        >
-          <ChevronRight size={20} className="text-military-info" />
-        </button>
-        
-        {/* Cards container */}
-        <div 
-          ref={scrollContainerRef}
-          className="flex overflow-x-auto pb-4 -mx-2 px-10 hide-scrollbar"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {terrainData.map((terrain) => (
-            <div key={terrain.id} className="px-2">
-              <TerrainCard 
-                {...terrain}
-                selected={terrain.id === selectedTerrainId}
-                onClick={() => onSelectTerrain(terrain.id)}
-              />
-            </div>
-          ))}
-        </div>
+        setTimeout(() => {
+          setShowHUD(false);
+        }, 1000);
+      }, 1500);
+    }, 300);
+  };
+
+  return (
+    <div className={cn("military-panel", className)}>
+      <h3 className="military-section-header">
+        <Map size={18} className="mr-2 text-military-info" />
+        Tactical Terrain Selection
+      </h3>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {terrains.map(terrain => (
+          <TooltipProvider key={terrain.id}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  <TerrainCard
+                    name={terrain.name}
+                    type={terrain.type}
+                    location={terrain.location}
+                    image={terrain.image}
+                    isNew={terrain.isNew}
+                    isSelected={selectedTerrainId === terrain.id}
+                    isLoading={loadingTerrain === terrain.id}
+                    onClick={() => handleSelectTerrain(terrain.id)}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p className="text-xs">Location: {terrain.location}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
       </div>
+      
+      {showHUD && (
+        <div className="hud-overlay">
+          <div className="hud-loading">
+            <div className="flex flex-col items-center">
+              <Loader size={24} className="animate-spin mb-2 text-military-info" />
+              <div>Loading Terrain Data...</div>
+              {loadingTerrain && (
+                <div className="text-sm mt-1 text-military-info/70">
+                  {terrains.find(t => t.id === loadingTerrain)?.name || ''}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
