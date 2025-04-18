@@ -49,7 +49,7 @@ const TabletInterface: React.FC = () => {
         toast({
           title: "TERRAIN LOADED SUCCESSFULLY",
           description: "Tactical view ready for operation.",
-          variant: "success",
+          variant: "default",
         });
         
         setTimeout(() => {
