@@ -206,29 +206,6 @@ const AudioFX: React.FC<{ className?: string }> = ({ className }) => {
               </div>
             ))}
           </div>
-          
-          <div className="flex justify-between mt-4 text-xs text-military-text/70">
-            <div className="flex items-center">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Dolby_Atmos_Logo.svg" 
-                alt="Dolby Atmos"
-                className="h-5 mr-1 opacity-70"
-              />
-              <span>Dolby Atmos Ready</span>
-            </div>
-            
-            <div className="flex items-center">
-              <span className="mr-2">Powered by</span>
-              <div className="flex items-center">
-                <img 
-                  src="/lovable-uploads/hsars-logo.png" 
-                  alt="HSARS Logo" 
-                  className="h-4 mr-1.5 opacity-80" 
-                />
-                <span className="font-semibold align-middle">HSARS</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
