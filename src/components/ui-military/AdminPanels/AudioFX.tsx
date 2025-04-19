@@ -218,14 +218,14 @@ const AudioFX: React.FC<{ className?: string }> = ({ className }) => {
             </div>
             
             <div className="flex items-center">
-              <span>Powered by</span>
-              <div className="ml-2 flex items-center">
+              <span className="mr-2">Powered by</span>
+              <div className="flex items-center">
                 <img 
                   src="/lovable-uploads/hsars-logo.png" 
                   alt="HSARS Logo" 
-                  className="h-4 mr-1 opacity-80" 
+                  className="h-4 mr-1.5 opacity-80" 
                 />
-                <span className="font-semibold">HSARS</span>
+                <span className="font-semibold align-middle">HSARS</span>
               </div>
             </div>
           </div>
