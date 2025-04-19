@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Volume2, Play, Pause, Volume, VolumeX, Layers } from 'lucide-react';
 import MilitaryButton from '../MilitaryButton';
@@ -51,13 +50,12 @@ const AudioFX: React.FC<{ className?: string }> = ({ className }) => {
         : effect
     ));
     
-    // Auto stop after duration
     if (soundEffects.find(e => e.id === effectId)?.isPlaying === false) {
       setTimeout(() => {
         setSoundEffects(prev => prev.map(effect => 
           effect.id === effectId ? { ...effect, isPlaying: false } : effect
         ));
-      }, 3000); // Simulate sound duration
+      }, 3000);
     }
   };
   
@@ -221,11 +219,14 @@ const AudioFX: React.FC<{ className?: string }> = ({ className }) => {
             
             <div className="flex items-center">
               <span>Powered by</span>
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wwise_logo.svg" 
-                alt="Wwise"
-                className="h-4 ml-1 opacity-70"
-              />
+              <div className="ml-2 flex items-center">
+                <img 
+                  src="/lovable-uploads/hsars-logo.png" 
+                  alt="HSARS Logo" 
+                  className="h-4 mr-1 opacity-80" 
+                />
+                <span className="font-semibold">HSARS</span>
+              </div>
             </div>
           </div>
         </div>
