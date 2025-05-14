@@ -8,8 +8,7 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={cn("px-5 py-4 text-xs text-gray-400 text-center border-t border-gray-700 flex flex-col items-center bg-military-primary/70 shadow-md", className)}>
       <div className="flex items-center mb-2">
-        <img 
-          src="/lovable-uploads/e8bf466e-32fa-4383-8a40-e80668c31ae9.png" 
+        <img  
           alt="KAAL Command Nexus Logo" 
           className="h-10 w-10 mr-3 opacity-80" 
         />
