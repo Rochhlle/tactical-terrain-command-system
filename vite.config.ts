@@ -4,7 +4,12 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(import { defineConfig } from 'vite';
+
+export default defineConfig({
+  base: '/tactical-terrain-command-system/', // 👈 REQUIRED for GitHub Pages
+});
+({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
